@@ -1,0 +1,16 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: report
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/certs
+
+keycloak:
+  auth-server-url: http://localhost:8888/auth
+  public-client: true
+  realm: exfi_realm
+  resource: report_client

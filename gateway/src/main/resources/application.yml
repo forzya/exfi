@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: group_client
+          uri: http://localhost:8084
+          predicates:
+            - Path=/manager/**
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: report_client
+          uri: http://localhost:8085
+          predicates:
+            - Path=/report/**
+          filters:
+            - RemoveRequestHeader=Cookie
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            token-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/token
+            authorization-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/auth
+            userinfo-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+        registration:
+          group_client:
+            provider: keycloak
+            client-id: group_client
+            client-secret: 5RVcLvRIxr7EdNZOhON9s0CpX84HnOeX
+            authorization-grant-type: authorization_code
+            redirect-uri: '{baseUrl}/login/oauth2/code/keycloak'
+
+server.port: 8060
+
+logging.level:
+  org.springframework.cloud.gateway: DEBUG
+  org.springframework.security: DEBUG
+  org.springframework.web.reactive.function.client: TRACE

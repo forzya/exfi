@@ -3,14 +3,54 @@ server:
 spring:
   application:
     name: report
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/certs
+  #  security:
+  #    oauth2:
+  #      resourceserver:
+  #        jwt:
+  #          jwk-set-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/certs
+  datasource:
+    password: pswd
+    url: jdbc:postgresql://localhost:5433/service3_test
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
 keycloak:
   auth-server-url: http://localhost:8888/auth
-  public-client: true
   realm: exfi_realm
+
+  public-client: true
   resource: report_client
+#  bearer-only: true
+#  use-resource-role-mappings: true
+  credentials:
+    secret: aqU5KjLK3GWNVFj6bg4Mr2CYZGru76i3
+  securityConstraints:
+    - authRoles:
+        - ADMIN
+        - USER
+      securityCollections:
+        - name: upload
+          methods:
+            - GET
+          patterns:
+            - /report/upload
+    - authRoles:
+        - ADMIN
+      securityCollections:
+        - name: upload0
+          patterns:
+            - /report/upload0
+    - authRoles:
+        - USER
+      securityCollections:
+        - name: upload1
+          patterns:
+            - /report/upload1

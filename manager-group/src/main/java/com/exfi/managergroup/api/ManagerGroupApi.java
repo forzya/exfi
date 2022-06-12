@@ -94,4 +94,11 @@ public class ManagerGroupApi {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/testme")
+    ResponseEntity<String> testme() {
+        logger.info("testme");
+        return new ResponseEntity<>("helloboy", HttpStatus.OK);
+    }
+
+
 }

@@ -25,32 +25,32 @@ spring:
 keycloak:
   auth-server-url: http://localhost:8888/auth
   realm: exfi_realm
-
   public-client: true
   resource: report_client
+
 #  bearer-only: true
 #  use-resource-role-mappings: true
-  credentials:
-    secret: aqU5KjLK3GWNVFj6bg4Mr2CYZGru76i3
-  securityConstraints:
-    - authRoles:
-        - ADMIN
-        - USER
-      securityCollections:
-        - name: upload
-          methods:
-            - GET
-          patterns:
-            - /report/upload
-    - authRoles:
-        - ADMIN
-      securityCollections:
-        - name: upload0
-          patterns:
-            - /report/upload0
-    - authRoles:
-        - USER
-      securityCollections:
-        - name: upload1
-          patterns:
-            - /report/upload1
+#  credentials:
+#    secret: aqU5KjLK3GWNVFj6bg4Mr2CYZGru76i3
+#  securityConstraints:
+#    - authRoles:
+#        - ADMIN
+#        - USER
+#      securityCollections:
+#        - name: upload
+#          methods:
+#            - GET
+#          patterns:
+#            - /report/upload
+#    - authRoles:
+#        - ADMIN
+#      securityCollections:
+#        - name: upload0
+#          patterns:
+#            - /report/upload0
+#    - authRoles:
+#        - USER
+#      securityCollections:
+#        - name: upload1
+#          patterns:
+#            - /report/upload1

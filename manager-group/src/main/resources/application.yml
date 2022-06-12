@@ -1,19 +1,8 @@
-
-keycloak:
-    auth-server-url: http://localhost:8888/auth
-    public-client: true
-    realm: exfi_realm
-    resource: group_client
 server:
   port: 8084
 spring:
   application:
-    name: callme
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/certs
+    name: group
   datasource:
     password: pswd
     url: jdbc:postgresql://localhost:5433/service1_test
@@ -27,3 +16,9 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
+keycloak:
+  auth-server-url: http://localhost:8888/auth
+  public-client: true
+  realm: exfi_realm
+  resource: group_client

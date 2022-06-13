@@ -1,0 +1,24 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: manager-group
+  datasource:
+    password: pswd
+    url: jdbc:postgresql://localhost:5433/service2_test
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+keycloak:
+  auth-server-url: http://localhost:8888/auth
+  public-client: true
+  realm: exfi_realm
+  resource: user_client

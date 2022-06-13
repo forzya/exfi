@@ -1,5 +1,8 @@
 package com.exfi.managergroup.api;
 
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,11 +20,12 @@ public class Controller {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
 
-        String principal = authentication.getPrincipal().toString();
-        System.out.println("principal_ " + principal);
+        KeycloakPrincipal<?> principal = (KeycloakPrincipal<?>) authentication.getPrincipal();
+        KeycloakSecurityContext keycloakSecurityContext = principal.getKeycloakSecurityContext();
+        AccessToken accessToken = keycloakSecurityContext.getToken();
 
-        String details = authentication.getDetails().toString();
-        System.out.println("details_ " + details);
+        String emailID = accessToken.getEmail();
+        System.out.println("emailID  " + emailID);
 
         return "ok";
     }

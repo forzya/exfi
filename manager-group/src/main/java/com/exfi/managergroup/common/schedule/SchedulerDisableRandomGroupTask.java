@@ -1,15 +1,13 @@
 package com.exfi.managergroup.common.schedule;
 
 import com.exfi.managergroup.service.DisableRandomGroupService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class SchedulerDisableRandomGroupTask {
-
-    private final Logger logger = LoggerFactory.getLogger(SchedulerDisableRandomGroupTask.class);
 
     private final DisableRandomGroupService disableRandomGroupService;
 
@@ -19,7 +17,7 @@ public class SchedulerDisableRandomGroupTask {
 
     @Scheduled(fixedDelay = 15000, initialDelay = 5000)
     public void schedule() {
-        logger.info("Disable random group");
+        log.info("Disable random group");
         disableRandomGroupService.disable();
     }
 

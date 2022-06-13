@@ -1,5 +1,6 @@
 package com.exfi.reporthandler.validation;
 
+import com.exfi.reporthandler.Constant;
 import com.exfi.reporthandler.exception.GroupNotValidException;
 import com.exfi.reporthandler.exception.UserNotValidException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,13 +16,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
 public class ValidationLayer implements IValidationLayer {
-
-    private final String gatewayUrl = "http://localhost:8060/";
 
     private final KeycloakRestTemplate template;
     private final ObjectMapper objectMapper;
@@ -41,7 +39,7 @@ public class ValidationLayer implements IValidationLayer {
             throw new UserNotValidException(message);
         }
 
-        String endpoint = gatewayUrl + "manager_user/getUsersByEmail?email=" + email;
+        String endpoint = Constant.GATEWAY_URL + "manager_user/getUsersByEmail?email=" + email;
         ResponseEntity<String> response = template.getForEntity(endpoint, String.class);
 
         String json = response.getBody();
@@ -51,8 +49,9 @@ public class ValidationLayer implements IValidationLayer {
         return false;
     }
 
-    public boolean groupIdsIsValid() {
-        String endpoint = gatewayUrl + "manager/getGroups?ids=1,2,3";
+    public boolean groupIdsIsValid(List<Long> groupIds) {
+        String ids = groupIds.stream().map(Object::toString).collect(Collectors.joining(","));
+        String endpoint = Constant.GATEWAY_URL + "manager/getGroups?ids=" + ids;
         ResponseEntity<String> response = template.getForEntity(endpoint, String.class);
 
         String json = response.getBody();

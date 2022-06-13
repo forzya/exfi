@@ -3,17 +3,15 @@ package com.exfi.managergroup.service;
 import com.exfi.managergroup.ActivityStatus;
 import com.exfi.managergroup.DirectoryGroup;
 import com.exfi.managergroup.repository.IDirectoryGroupRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
 
 @Service
+@Slf4j
 public class DisableRandomGroupService {
-
-    private final Logger logger = LoggerFactory.getLogger(DisableRandomGroupService.class);
 
     private final IDirectoryGroupRepository repository;
 
@@ -27,7 +25,7 @@ public class DisableRandomGroupService {
         DirectoryGroup directoryGroup = getRandomDirectoryGroup(directoryGroups);
         directoryGroup.setActivityStatus(ActivityStatus.INACTIVE);
 
-        logger.info("Disable group for DirectoryGroup with id " + directoryGroup.getId());
+        log.info("Disable group for DirectoryGroup with id " + directoryGroup.getId());
 
         repository.save(directoryGroup);
     }

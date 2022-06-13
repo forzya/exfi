@@ -1,14 +1,15 @@
 package com.exfi.reporthandler.model;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "DATA_REPORT")
 public class DataReport {
 
     @Id
-    @GeneratedValue
     private Long id;
 
 //    @OneToMany(cascade = CascadeType.ALL)
@@ -20,6 +21,10 @@ public class DataReport {
 //    private List<Report> singleReports;
 
     public DataReport() {
+    }
+
+    public DataReport(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

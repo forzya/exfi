@@ -27,11 +27,12 @@ keycloak:
   realm: exfi_realm
   public-client: true
   resource: report_client
-
+#  token-store: "cookie"
+#  credentials:
+#    secret:
 #  bearer-only: true
 #  use-resource-role-mappings: true
-#  credentials:
-#    secret: aqU5KjLK3GWNVFj6bg4Mr2CYZGru76i3
+
 #  securityConstraints:
 #    - authRoles:
 #        - ADMIN

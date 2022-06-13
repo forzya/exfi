@@ -10,15 +10,12 @@ public class Report {
     @GeneratedValue
     private Long id;
 
-    @JoinColumn(insertable=false, updatable=false)
+    @JoinColumn(updatable=false)
     @ManyToOne(optional = false)
     private DataReport dataReport;
 
     @Column
     private String report;
-
-    @Column
-    private User uploaded;
 
     public Report() {
     }
@@ -39,14 +36,6 @@ public class Report {
         this.report = report;
     }
 
-    public User getUploaded() {
-        return uploaded;
-    }
-
-    public void setUploaded(User uploaded) {
-        this.uploaded = uploaded;
-    }
-
     public DataReport getDataReport() {
         return dataReport;
     }
@@ -55,13 +44,4 @@ public class Report {
         this.dataReport = dataReport;
     }
 
-    @Override
-    public String toString() {
-        return "Report{" +
-                "id=" + id +
-                ", dataReport=" + dataReport +
-                ", report='" + report + '\'' +
-                ", uploaded=" + uploaded +
-                '}';
-    }
 }

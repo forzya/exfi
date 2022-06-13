@@ -1,9 +1,11 @@
 package com.exfi.reporthandler.validation;
 
+import java.util.List;
+
 public interface IValidationLayer {
 
     boolean userIsValid();
 
-    boolean groupIdsIsValid();
+    boolean groupIdsIsValid(List<Long> groupIds);
 
 }

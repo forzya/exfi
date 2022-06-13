@@ -1,15 +1,20 @@
 package com.exfi.reporthandler.api;
 
+import com.exfi.reporthandler.model.DataReport;
+import com.exfi.reporthandler.model.Report;
 import com.exfi.reporthandler.repository.IDataReportRepository;
 import com.exfi.reporthandler.repository.IReportRepository;
+import com.exfi.reporthandler.service.IReportService;
 import com.exfi.reporthandler.validation.IValidationLayer;
 import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -18,104 +23,52 @@ public class ReportApi {
 
     private final IReportRepository reportRepository;
     private final IDataReportRepository dataReportRepository;
-    private final KeycloakRestTemplate template;
     private final IValidationLayer validationLayer;
-
-//    public ReportApi(IReportRepository reportRepository, IDataReportRepository dataReportRepository, KeycloakRestTemplate template) {
-//        this.reportRepository = reportRepository;
-//        this.dataReportRepository = dataReportRepository;
-//        this.template = template;
-//    }
+    private final IReportService reportService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
 
-    public ReportApi(IReportRepository reportRepository, IDataReportRepository dataReportRepository, KeycloakRestTemplate template, IValidationLayer validationLayer) {
+    public ReportApi(IReportRepository reportRepository, IDataReportRepository dataReportRepository,
+                     IValidationLayer validationLayer, IReportService reportService, SimpMessagingTemplate simpMessagingTemplate) {
         this.reportRepository = reportRepository;
         this.dataReportRepository = dataReportRepository;
-        this.template = template;
         this.validationLayer = validationLayer;
+        this.reportService = reportService;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
-    @GetMapping("/upload")
+    @GetMapping("/getReportByEntityId")
+    ResponseEntity<List<Report>> getGroups(@RequestParam Long id) {
+
+        Optional<DataReport> dataReportOptional = dataReportRepository.findById(id);
+        if (dataReportOptional.isPresent()) {
+            List<Report> reports = reportRepository.findAllByDataReport(dataReportOptional.get());
+            if (!reports.isEmpty()) {
+                return new ResponseEntity<>(reports, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // todo always false ?
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/uploadReport")
     @PreAuthorize("hasRole('USER')")
-    ResponseEntity<String> upload() {
-        System.out.println("upload");
-        String endpoint = "http://localhost:8060/manager/test";
-        ResponseEntity<String> response = template.getForEntity(endpoint, String.class);
-        System.out.println("test_" + response.getBody());
-
-        return new ResponseEntity<>("hellom", HttpStatus.OK);
-    }
-
-
-    @GetMapping("/upload0")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<String> upload0() {
-        System.out.println("upload0");
-
-        return new ResponseEntity<>("hellom", HttpStatus.OK);
-    }
-
-
-    @GetMapping("/upload1")
-    ResponseEntity<String> upload1() {
-        System.out.println("upload1");
+    ResponseEntity<Void> uploadReport(@RequestBody String report, @RequestParam List<Long> ids, @RequestParam Long id) {
 
         validationLayer.userIsValid();
+        validationLayer.groupIdsIsValid(ids);
 
-        validationLayer.groupIdsIsValid();
-
-        return new ResponseEntity<>("hellom", HttpStatus.OK);
+        reportService.uploadHandler(report, ids, id);
+//        simpMessagingTemplate.convertAndSend("1");
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/upload2")
-    ResponseEntity<String> upload2() {
-        System.out.println("upload2");
-
-        return new ResponseEntity<>("hellom", HttpStatus.OK);
+    @PostMapping("/uploadReportWithoutValidation")
+    @PreAuthorize("hasRole('USER')")
+    ResponseEntity<Void> uploadReportWithoutValidation(@RequestBody String report, @RequestParam List<Long> ids, @RequestParam Long id) {
+        reportService.uploadHandler(report, ids, id);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-//    @GetMapping("/upload2")
-//    ResponseEntity<String> upload2() {
-//        System.out.println("upload2");
-//        String endpoint = "http://localhost:8060/manager/getTest1";
-////        ResponseEntity<String> response = template.getForEntity(endpoint, String.class);
-////        System.out.println(response.getBody());
-//
-//        Report dataReport = getDataReport();
-//        reportRepository.save(dataReport);
-//
-//        return new ResponseEntity<>("hellom", HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/upload3")
-//    ResponseEntity<String> upload3(@RequestParam Long id) {
-//        System.out.println("upload3");
-//
-//        DataReport dataReport = dataReportRepository.findById(id).get();
-//
-//        List<Report> reports = reportRepository.findAllByDataReport(dataReport);
-//
-//        System.out.println(reports);
-//
-//        return new ResponseEntity<>("hellom", HttpStatus.OK);
-//    }
-//
-//    private Report getDataReport() {
-//
-//        DataReport dataReport = new DataReport();
-//
-//        User user = new User();
-//        user.setLastName("ln");
-//        user.setFirstName("fn");
-//        user.setLogin("l");
-//
-//        Report report = new Report();
-//        report.setReport("reporttestme");
-//        report.setUploaded(user);
-//
-//        report.setDataReport(dataReport);
-//
-//        return report;
-//    }
 
 }

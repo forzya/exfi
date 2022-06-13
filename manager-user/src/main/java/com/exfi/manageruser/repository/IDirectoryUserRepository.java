@@ -12,4 +12,6 @@ public interface IDirectoryUserRepository extends JpaRepository<DirectoryUser, L
 
     List<DirectoryUser> findByActivityStatus(ActivityStatus activityStatus);
 
+    List<DirectoryUser> findByEmail(String email);
+
 }

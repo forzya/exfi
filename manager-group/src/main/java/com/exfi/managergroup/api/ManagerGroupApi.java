@@ -43,7 +43,7 @@ public class ManagerGroupApi {
     @GetMapping("/getGroups")
     ResponseEntity<List<DirectoryGroup>> getGroups(@RequestParam List<Long> ids) {
         List<DirectoryGroup> directoryGroups = repository.findAllById(ids);
-        return new ResponseEntity<>(directoryGroups, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(directoryGroups, HttpStatus.OK);
     }
 
     @GetMapping("/getAllGroups")
@@ -86,19 +86,9 @@ public class ManagerGroupApi {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/createAuto")
-    ResponseEntity<Void> createAuto() {
-        logger.info("createAuto");
-        DirectoryGroup directoryGroup = new DirectoryGroup(ActivityStatus.ACTIVE, List.of("1", "2"));
-        repository.save(directoryGroup);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/test")
+    ResponseEntity<String> test() {
+        return new ResponseEntity<>("hrlll", HttpStatus.OK);
     }
-
-    @GetMapping("/testme")
-    ResponseEntity<String> testme() {
-        logger.info("testme");
-        return new ResponseEntity<>("helloboy", HttpStatus.OK);
-    }
-
 
 }

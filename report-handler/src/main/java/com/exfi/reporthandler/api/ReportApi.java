@@ -2,6 +2,7 @@ package com.exfi.reporthandler.api;
 
 import com.exfi.reporthandler.repository.IDataReportRepository;
 import com.exfi.reporthandler.repository.IReportRepository;
+import com.exfi.reporthandler.validation.IValidationLayer;
 import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,27 @@ public class ReportApi {
     private final IReportRepository reportRepository;
     private final IDataReportRepository dataReportRepository;
     private final KeycloakRestTemplate template;
+    private final IValidationLayer validationLayer;
 
-    public ReportApi(IReportRepository reportRepository, IDataReportRepository dataReportRepository, KeycloakRestTemplate template) {
+//    public ReportApi(IReportRepository reportRepository, IDataReportRepository dataReportRepository, KeycloakRestTemplate template) {
+//        this.reportRepository = reportRepository;
+//        this.dataReportRepository = dataReportRepository;
+//        this.template = template;
+//    }
+
+
+    public ReportApi(IReportRepository reportRepository, IDataReportRepository dataReportRepository, KeycloakRestTemplate template, IValidationLayer validationLayer) {
         this.reportRepository = reportRepository;
         this.dataReportRepository = dataReportRepository;
         this.template = template;
+        this.validationLayer = validationLayer;
     }
 
     @GetMapping("/upload")
     @PreAuthorize("hasRole('USER')")
     ResponseEntity<String> upload() {
         System.out.println("upload");
-        String endpoint = "http://localhost:8060/manager/testme";
+        String endpoint = "http://localhost:8060/manager/test";
         ResponseEntity<String> response = template.getForEntity(endpoint, String.class);
         System.out.println("test_" + response.getBody());
 
@@ -49,6 +59,10 @@ public class ReportApi {
     @GetMapping("/upload1")
     ResponseEntity<String> upload1() {
         System.out.println("upload1");
+
+        validationLayer.userIsValid();
+
+        validationLayer.groupIdsIsValid();
 
         return new ResponseEntity<>("hellom", HttpStatus.OK);
     }

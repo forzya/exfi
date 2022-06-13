@@ -6,18 +6,18 @@ spring:
       #      default-filters:
       #        - TokenRelay
       routes:
+        - id: user_client
+          uri: http://localhost:8083
+          predicates:
+            - Path=/manager_user/**
         - id: group_client
           uri: http://localhost:8084
           predicates:
             - Path=/manager/**
-#          filters:
-#            - RemoveRequestHeader=Cookie
         - id: report_client
           uri: http://localhost:8085
           predicates:
             - Path=/report/**
-  #          filters:
-  #            - RemoveRequestHeader=Cookie
 
 
 server.port: 8060

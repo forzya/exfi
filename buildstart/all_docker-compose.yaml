@@ -1,0 +1,96 @@
+#problem with link
+
+version: "2.0"
+services:
+
+  postgres:
+    image: postgres:11
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "pswd"
+      POSTGRES_USER: postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    command:
+      - "postgres"
+      - "-c"
+      - "log_statement=all"
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+
+  keycloack:
+    image: jboss/keycloak:latest
+    container_name: keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_PASSWORD: pswd
+      KEYCLOAK_USER: "spring"
+      KEYCLOAK_PASSWORD: "spring123"
+    ports:
+      - "8888:8080"
+    networks:
+      - backend
+    depends_on:
+      - postgres 
+      
+  group:
+    image: manager-group
+    container_name: group
+    restart: always
+    environment:
+      POSTGRES_HOSTNAME: "postgres"
+      POSTGRES_PORT: 5432
+    ports:
+      - "8084:8084"
+    networks:
+      - backend
+    depends_on:
+      - postgres  
+    
+  user:
+    image: manager-user
+    container_name: user
+    restart: always
+    environment:
+      POSTGRES_HOSTNAME: "postgres"
+      POSTGRES_PORT: 5432
+    ports:
+      - "8083:8083"
+    networks:
+      - backend
+    depends_on:
+      - postgres 
+    
+  report:
+    image: report
+    container_name: report
+    restart: always
+    environment:
+      POSTGRES_HOSTNAME: "postgres"
+      POSTGRES_PORT: 5432
+    ports:
+      - "8085:8085"
+    networks:
+      - backend
+    depends_on:
+      - postgres 
+   
+  gateway:
+    image: gateway
+    restart: always
+    ports:
+      - "8060:8060"
+    networks:
+      - backend
+    depends_on:
+      - postgres     
+
+networks:
+  backend:
+    driver: bridge

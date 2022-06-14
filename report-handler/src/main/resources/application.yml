@@ -3,11 +3,6 @@ server:
 spring:
   application:
     name: report
-  #  security:
-  #    oauth2:
-  #      resourceserver:
-  #        jwt:
-  #          jwk-set-uri: http://localhost:8888/auth/realms/exfi_realm/protocol/openid-connect/certs
   datasource:
     password: pswd
     url: jdbc:postgresql://${POSTGRES_HOSTNAME:localhost}:${POSTGRES_PORT:5433}/service3_test

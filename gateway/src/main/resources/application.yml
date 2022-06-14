@@ -3,8 +3,6 @@ spring:
     name: gateway
   cloud:
     gateway:
-      #      default-filters:
-      #        - TokenRelay
       routes:
         - id: user_client
           uri: http://localhost:8083

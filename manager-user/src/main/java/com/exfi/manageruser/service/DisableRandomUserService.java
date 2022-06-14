@@ -3,17 +3,15 @@ package com.exfi.manageruser.service;
 import com.exfi.manageruser.ActivityStatus;
 import com.exfi.manageruser.DirectoryUser;
 import com.exfi.manageruser.repository.IDirectoryUserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
 
 @Service
+@Slf4j
 public class DisableRandomUserService {
-
-    private final Logger logger = LoggerFactory.getLogger(DisableRandomUserService.class);
 
     private final IDirectoryUserRepository repository;
 
@@ -29,7 +27,7 @@ public class DisableRandomUserService {
         DirectoryUser directoryGroup = getRandomDirectoryGroup(directoryGroups);
         directoryGroup.setActivityStatus(ActivityStatus.INACTIVE);
 
-        logger.info("Disable group for DirectoryUser with id " + directoryGroup.getId());
+        log.info("Disable group for DirectoryUser with id " + directoryGroup.getId());
 
         repository.save(directoryGroup);
     }

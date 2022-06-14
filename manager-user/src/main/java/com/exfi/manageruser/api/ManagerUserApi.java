@@ -2,6 +2,7 @@ package com.exfi.manageruser.api;
 
 import com.exfi.manageruser.DirectoryUser;
 import com.exfi.manageruser.repository.IDirectoryUserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/manager_user")
+@Slf4j
 public class ManagerUserApi {
 
     private IDirectoryUserRepository repository;
@@ -24,7 +26,7 @@ public class ManagerUserApi {
 
     @GetMapping("/getAllUser")
     ResponseEntity<List<DirectoryUser>> getAllUser() {
-        System.out.println("getAllUser");
+        log.info("getAllUser");
         List<DirectoryUser> directoryUsers = repository.findAll();
 
         return new ResponseEntity<>(directoryUsers, HttpStatus.OK);
@@ -32,7 +34,7 @@ public class ManagerUserApi {
 
     @GetMapping("/getUsers")
     ResponseEntity<List<DirectoryUser>> getUsers(@RequestParam List<Long> ids) {
-        System.out.println("getUser");
+        log.info("getUsers");
         List<DirectoryUser> directoryUsers = repository.findAllById(ids);
 
         return new ResponseEntity<>(directoryUsers, HttpStatus.OK);
@@ -40,7 +42,7 @@ public class ManagerUserApi {
 
     @GetMapping("/getUsersByEmail")
     ResponseEntity<List<DirectoryUser>> getUsersByEmail(@RequestParam String email) {
-        System.out.println("getUsersByEmail");
+        log.info("getUsersByEmail");
         List<DirectoryUser> directoryUsers = repository.findByEmail(email);
 
         return new ResponseEntity<>(directoryUsers, HttpStatus.OK);
@@ -48,7 +50,7 @@ public class ManagerUserApi {
 
     @GetMapping("/getUser")
     ResponseEntity<DirectoryUser> getUser(@RequestParam Long id) {
-        System.out.println("getUser");
+        log.info("getUser");
         Optional<DirectoryUser> optionalDirectoryUser = repository.findById(id);
         if (optionalDirectoryUser.isPresent()) {
             DirectoryUser directoryUser = optionalDirectoryUser.get();

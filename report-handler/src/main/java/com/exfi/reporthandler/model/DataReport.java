@@ -1,12 +1,18 @@
 package com.exfi.reporthandler.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "DATA_REPORT")
+@NoArgsConstructor
+@Getter
+@Setter
 public class DataReport {
 
     @Id
@@ -20,19 +26,8 @@ public class DataReport {
 //    )
 //    private List<Report> singleReports;
 
-    public DataReport() {
-    }
 
     public DataReport(Long id) {
         this.id = id;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 }

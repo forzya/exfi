@@ -15,7 +15,7 @@ public class SchedulerDisableRandomGroupTask {
         this.disableRandomGroupService = disableRandomGroupService;
     }
 
-    @Scheduled(fixedDelay = 15000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 30000, initialDelay = 5000)
     public void schedule() {
         log.info("Disable random group");
         disableRandomGroupService.disable();

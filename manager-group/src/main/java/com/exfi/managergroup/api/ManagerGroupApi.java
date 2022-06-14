@@ -42,12 +42,14 @@ public class ManagerGroupApi {
     }
 
     @GetMapping("/getGroups")
+    @PreAuthorize("hasRole('USER')")
     ResponseEntity<List<DirectoryGroup>> getGroups(@RequestParam List<Long> ids) {
         List<DirectoryGroup> directoryGroups = repository.findAllById(ids);
         return new ResponseEntity<>(directoryGroups, HttpStatus.OK);
     }
 
     @GetMapping("/getAllGroups")
+    @PreAuthorize("hasRole('USER')")
     ResponseEntity<List<DirectoryGroup>> getAllGroups() {
         log.info("Get all groups");
         List<DirectoryGroup> directoryGroups = repository.findAll();
@@ -95,7 +97,7 @@ public class ManagerGroupApi {
     }
 
 
-    @GetMapping(path = "/createttest")
+    @GetMapping(path = "/createtest")
     public ResponseEntity<DirectoryGroup> create() {
         log.info("save group ");
         DirectoryGroup directoryGroup = new DirectoryGroup("1234567890", ActivityStatus.ACTIVE, List.of("em1"));

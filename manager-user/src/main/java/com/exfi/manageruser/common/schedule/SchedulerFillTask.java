@@ -1,15 +1,14 @@
 package com.exfi.manageruser.common.schedule;
 
 import com.exfi.manageruser.service.FillTestDataService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class SchedulerFillTask {
 
-    private final Logger logger = LoggerFactory.getLogger(SchedulerFillTask.class);
 
     private final FillTestDataService fillTestDataService;
 
@@ -19,7 +18,7 @@ public class SchedulerFillTask {
 
     @Scheduled(fixedDelay = 15000, initialDelay = 5000)
     public void schedule() {
-        logger.info("Generate test data in database");
+        log.info("Generate test data in database");
         fillTestDataService.fill();
     }
 

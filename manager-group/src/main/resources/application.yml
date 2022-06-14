@@ -5,7 +5,8 @@ spring:
     name: group
   datasource:
     password: pswd
-    url: jdbc:postgresql://localhost:5433/service1_test
+#    url: jdbc:postgresql://localhost:5433/service1_test
+    url: jdbc:postgresql://${POSTGRES_HOSTNAME:localhost}:${POSTGRES_PORT:5433}/service1_test
     username: postgres
   jpa:
     hibernate:
@@ -18,7 +19,7 @@ spring:
             non_contextual_creation: true
 
 keycloak:
-  auth-server-url: http://localhost:8888/auth
+  auth-server-url: http://localhost:8888
   public-client: true
   realm: exfi_realm
   resource: group_client

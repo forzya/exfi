@@ -5,7 +5,8 @@ spring:
     name: manager-group
   datasource:
     password: pswd
-    url: jdbc:postgresql://localhost:5433/service2_test
+#    url: jdbc:postgresql://localhost:5433/service2_test
+    url: jdbc:postgresql://${POSTGRES_HOSTNAME:localhost}:${POSTGRES_PORT:5433}/service2_test
     username: postgres
   jpa:
     hibernate:

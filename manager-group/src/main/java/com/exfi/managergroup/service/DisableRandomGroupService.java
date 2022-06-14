@@ -6,6 +6,7 @@ import com.exfi.managergroup.repository.IDirectoryGroupRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -24,6 +25,7 @@ public class DisableRandomGroupService {
 
         DirectoryGroup directoryGroup = getRandomDirectoryGroup(directoryGroups);
         directoryGroup.setActivityStatus(ActivityStatus.INACTIVE);
+        directoryGroup.setDeletionDateTime(LocalDateTime.now());
 
         log.info("Disable group for DirectoryGroup with id " + directoryGroup.getId());
 

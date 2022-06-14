@@ -42,6 +42,10 @@ public class DirectoryGroup {
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
 
+    @Column
+    private LocalDateTime deletionDateTime;
+
+
     public DirectoryGroup(String identifier, ActivityStatus activityStatus, List<String> emails) {
         this.identifier = identifier;
         this.activityStatus = activityStatus;

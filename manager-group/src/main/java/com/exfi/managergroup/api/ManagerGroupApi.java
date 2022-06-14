@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,6 @@ public class ManagerGroupApi {
     }
 
     @GetMapping("/getAllGroups")
-    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<List<DirectoryGroup>> getAllGroups() {
         log.info("Get all groups");
         List<DirectoryGroup> directoryGroups = repository.findAll();
@@ -55,10 +55,16 @@ public class ManagerGroupApi {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Void> deleteById(@RequestParam Long id) {
         log.info("delete group by id " + id);
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
+        Optional<DirectoryGroup> optionalDirectoryGroup = repository.findById(id);
+        if (optionalDirectoryGroup.isPresent()) {
+            DirectoryGroup directoryGroup = optionalDirectoryGroup.get();
+            directoryGroup.setActivityStatus(ActivityStatus.INACTIVE);
+            directoryGroup.setDeletionDateTime(LocalDateTime.now());
+            repository.save(directoryGroup);
+//            repository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,6 +73,7 @@ public class ManagerGroupApi {
     @PostMapping(path = "/create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DirectoryGroup> create(@RequestBody @Valid DirectoryGroup newGroup) {
         log.info("save group ");
         DirectoryGroup user = repository.save(newGroup);
@@ -74,6 +81,7 @@ public class ManagerGroupApi {
     }
 
     @GetMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Void> updateTest(@RequestParam Long id) {
         log.info("update group with id " + id);
         Optional<DirectoryGroup> optionalDirectoryGroup = repository.findById(id);
@@ -86,9 +94,12 @@ public class ManagerGroupApi {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/test")
-    ResponseEntity<String> test() {
-        return new ResponseEntity<>("hrlll", HttpStatus.OK);
-    }
 
+    @GetMapping(path = "/createttest")
+    public ResponseEntity<DirectoryGroup> create() {
+        log.info("save group ");
+        DirectoryGroup directoryGroup = new DirectoryGroup("1234567890", ActivityStatus.ACTIVE, List.of("em1"));
+        DirectoryGroup user = repository.save(directoryGroup);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
 }

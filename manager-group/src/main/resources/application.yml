@@ -19,7 +19,7 @@ spring:
             non_contextual_creation: true
 
 keycloak:
-  auth-server-url: http://localhost:8888
+  auth-server-url: http://localhost:8888/auth
   public-client: true
   realm: exfi_realm
   resource: group_client
